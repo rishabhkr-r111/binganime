@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Anime Template" />
+    <meta name="keywords" content="Anime, unica, creative, html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Binganime</title>
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css" />
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css" />
+    <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <style>
+      .slicknav_nav a {
+        color: #ffffff;
+      }
+
+      .slicknav_nav a:hover {
+        color: #ffffff;
+      }
+      .filter__controls li a {
+        color: #ffffff;
+        border: 1px solid white;
+        border-radius: 10%;
+        padding: 3px;
+      }
+      .filter__controls li a.current {
+        color: #000;
+        background: #ffffff;
+      }
+      .search-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 40px;
+      }
+      .search-model-form {
+        display: flex;
+        text-align: center;
+      }
+      .product__sidebar__comment__item {
+        border: 1px solid #ffffff;
+        border-radius: 5px;
+      }
+      .product__sidebar__comment__item__text h5 {
+        margin-top: 10px;
+      }
+      .product__sidebar__comment__item__pic {
+        width: 90px;
+        height: auto;
+      }
+      .more {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/header.ejs') %>
+
+      <section class="anime-details spad">
+    <div class="container">
+      <div class="anime__details__content">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="anime__details__pic set-bg" data-setbg="">
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <div class="anime__details__text">
+              <div class="anime__details__title">
+                <h3><%= title %></h3>
+                <span> </span>
+              </div>
+              <p><%= details %></p>
+              <div class="anime__details__widget">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6">
+                    <ul class="anime-attributes">
+                      <li class="status"><span>Status:</span> </li>
+                      <li class="type"><span>Type:</span></li>
+                      
+                      <li class="duration"><span>Duration :</span> 24</li>
+                      <li class="genres"><span>Genres:</span> </li>
+                      <div class="more">
+                      <ul>
+                        <li class="openings"><span>Openings :</span>
+                          <ul class="text-white">
+                          </ul>
+                        </li>
+                        <li class="endings"><span>Endings :</span>
+                          <ul class="text-white">
+                          </ul>
+                        </li>
+                        <li class="related-content"><span>Related Content : </span></li>
+                      </ul>
+                      </div>        
+                      <div class="more-text text-center text-primary">show more ...</div>
+                    </ul>
+                  </div>
+                </div>
+                <div class="anime__details__episodes ">
+                  <div class="section-title ">
+                    <h5>Episodes list</h5>
+                  </div>
+                  <div class="episodes-list">
+                  <% 
+                  let i = eps.length
+                  eps.map(ep => { %>
+                  <a href="/watch/<%= ep.slug %>">Episode <%= i %></a>
+                  <% i--
+                  }) 
+                  %>
+                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <%- include('./partials/footer.ejs') %>
+
+    <!-- Search model Begin -->
+    <div class="search-model">
+      <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch"><i class="icon_close"></i></div>
+        <form class="search-model-form">
+          <input type="text" id="search-input" placeholder="Search here....." />
+          <div class="search-icon">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Search model end -->
+    <!-- Js Plugins -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.slicknav.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+      let more = false;
+      (async function getDetails() {
+              let r =  await fetch(`https://api.jikan.moe/v3/search/anime?q=<%= title %>`)
+      let json = await r.json()
+      r = await fetch(`https://api.jikan.moe/v3/anime/${json.results[0].mal_id}`)
+      let data = await r.json()
+      
+      let info = {
+        alias_en : data.title_english,
+        alias_jp : data.title_japanese,
+        image_url :data.image_url ,
+        status : data.status,
+        genres : generateGeneres(data.genres),
+        type : data.type,
+        openings : data.opening_themes,
+        endings : data.ending_themes,
+        duration : data.duration,
+        my_anime_list : data.url
+      }
+      
+      putContent(info)
+    })()
+    
+    function generateGeneres(data) {
+      generes = []
+      data.map( genere => {
+        generes.push(genere.name)
+      })
+      return generes.join(', ')
+    }
+      function putContent(info) {
+        $('.anime__details__title span').text('( ' + info.alias_jp + ' / ' + info.alias_en + ' )')
+      $('.set-bg').css('background-image', 'url(' + info.image_url + ')')
+      $('.anime-attributes .genres').html('<span> Genres : </span>' + info.genres)
+      $('.anime-attributes .status').html('<span> Status : </span>' + info.status)
+      $('.anime-attributes .duration').html('<span> Duration : </span>' + info.duration)
+      $('.anime-attributes .type').html('<span> Type : </span>' + info.type)
+      $('.related-content').html('<span> Related : </span>' + `<a href="${info.my_anime_list}" target="_blank" rel="noopener noreferrer" >MyAnimelist</a>`)
+
+
+      info.openings.map(op => {
+              $('.openings ul').prepend(`<li><a href="https://m.youtube.com/results?search_query=<%= title %> openings ${op.split('"')[1]}" target="_blank" rel="noopener noreferrer"> ${op}</a> </li>`)
+      })
+      info.endings.map(end => {
+              $('.endings ul').prepend(`<li> <a href="https://m.youtube.com/results?search_query=<%= title %> ending ${end.split('"')[1]}" target="_blank" rel="noopener noreferrer"> ${end}</a> </li>`)
+      })
+
+      $('.more-text').on('click', function () {
+        if(!more){
+          $('.more').css('display','inline')
+          $(this).text('show less')
+          more = true
+        }
+        else {
+          $('.more').css('display','none')
+          $(this).text('show more...')
+          more = false
+        }
+      })
+      }
+
+    </script>
+  </body>
+</html>

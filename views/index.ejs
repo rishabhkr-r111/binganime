@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Anime Template" />
+    <meta name="keywords" content="Anime, unica, creative, html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Binganime</title>
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css" />
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css" />
+    <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <style>
+      .slicknav_nav a {
+        color: #ffffff;
+      }
+
+      .slicknav_nav a:hover {
+        color: #ffffff;
+      }
+      .filter__controls li a {
+        color: #ffffff;
+        border: 1px solid white;
+        border-radius: 10%;
+        padding: 3px;
+      }
+      .filter__controls li a.current {
+        color: #000;
+        background: #ffffff;
+      }
+      .search-icon {
+      width: 50px;
+      height: 50px;
+      font-size: 40px;
+      }
+      .search-model-form {
+      display: flex;
+      text-align: center;
+      }
+
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/header.ejs') %>
+
+    <section class="product spad">
+      <div class="container">
+        <div class="recent__product">
+          <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-8">
+              <div class="section-title">
+                <h4>
+                  Recently Added
+                  <ul class="filter__controls">
+                    <li>
+                      <% if(type == 1) { %>
+                      <a href="/" class="current">SUB</a>
+                      <% } else if(type ==2) { %>
+                      <a href="/">SUB</a>
+                      <% } %>  
+                    <li>
+                      <% if(type == 1) { %>
+                      <a href="/dubbed">DUB</a>
+                      <% } else if(type == 2) { %>
+                      <a href="/dubbed" class="current">DUB</a> 
+                      <% } %>
+                    </li>
+                  </ul>
+                </h4>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <% data.map( anime => { %>
+          <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="product__item">
+               <a href="/watch/<%= anime.slug %>">
+                <div
+                  class="product__item__pic set-bg"
+                  data-setbg="<%= anime.image_url %>"
+                >
+                <div class="ep"><%= anime.episode %></div>
+                <div class="type"><%= anime.type %></div>
+                </div>
+               </a>  
+                
+                <div class="product__item__text">
+                  <h5><a href="/watch/<%= anime.slug %>"><%= anime.title %></a></h5>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+          </div>
+          <!-- pagenation -->
+          <div class="product__pagination">
+          <% if(pev_page) { %>
+            <% if(type == 1) { %>
+            <a href="/subbed/<%= pev_page %>"><i class="fa fa-angle-left"></i></a>
+            <% } else if(type == 2) { %>
+             <a href="/dubbed/<%= pev_page %>"><i class="fa fa-angle-left"></i></a>
+             <% } %>
+          <% } %>  
+            
+          <% if (type == 1) { %>
+            <a href="/subbed/<%= next_page %>"><i class="fa fa-angle-right"></i></a>
+          <% } else if(type == 2) { %>
+             <a href="/dubbed/<%= next_page %>"><i class="fa fa-angle-right"></i></a>
+          <% } %>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <%- include('./partials/footer.ejs') %>
+
+    <!-- Search model Begin -->
+    <div class="search-model">
+      <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch"><i class="icon_close"></i></div>
+        <form class="search-model-form">
+          <input type="text" id="search-input" placeholder="Search here....." />
+          <div class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></div>
+        </form>
+      </div>
+    </div>
+    <!-- Search model end -->
+    <!-- Js Plugins -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.slicknav.js"></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
