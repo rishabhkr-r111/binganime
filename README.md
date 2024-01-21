@@ -5,7 +5,7 @@
 1. git clone https://github.com/rishabhkr-r111/binganime.git
 1. ```cd binganime```
 2. npm i
-3. install binganime api
+3. install binganime api(https://github.com/rishabhkr-r111/api-binganime)
 4. npm run dev
 
 ### Link
